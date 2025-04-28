@@ -1,0 +1,24 @@
+serverFiles:
+  alerting_rules.yml:
+    groups:
+      - name: app.rules
+        rules:
+          - alert: MyAppUnhealthy
+            expr: kube_deployment_status_replicas_unavailable{deployment="myapp"} > 0
+            for: 30s
+            labels:
+              severity: critical
+            annotations:
+              summary: "MyApp is unhealthy"
+              description: "Some replicas of myapp are unavailable."
+
+alertmanagerFiles:
+  alertmanager.yml:
+    global: {}
+    route:
+      receiver: 'webhook-receiver'
+    receivers:
+      - name: 'webhook-receiver'
+        webhook_configs:
+          - url: 'http://rollback-webhook.default.svc.cluster.local/trigger'
+            send_resolved: true
