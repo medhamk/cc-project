@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: rollback-webhook
-          image: vachuvi/rollback-webhook:latest
+          image: <user_name>/rollback-webhook:latest
           ports:
             - containerPort: 5000
 ---
